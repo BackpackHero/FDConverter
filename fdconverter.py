@@ -331,7 +331,7 @@ def Convert(json_in, path):
             if HasData(move["Movement"],"type"):
                 move_out["movement_type"]=move["Movement"]["type"]
             if HasData(move["Movement"],"length"):
-                move_out["movement_type"]=move["Movement"]["length"]
+                move_out["movement_length"]=move["Movement"]["length"]
             json_out["movement_effects"].append(move_out)
 
     # Movable Item
