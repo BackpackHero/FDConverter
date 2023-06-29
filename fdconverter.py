@@ -396,6 +396,7 @@ if __name__ == "__main__":
             jstring=json.dumps(Convert(json_in,args.input), indent=4)
         print(jstring)
     else:
+        os.makedirs(args.output+"/Items/", exist_ok=True)
         i=1
         for filename in os.listdir(args.input):
             if filename.endswith('.json') and filename.startswith("item"):
