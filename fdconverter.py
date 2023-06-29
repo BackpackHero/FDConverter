@@ -42,8 +42,11 @@ def ToIntFloat(string):
 def RemoveEmptyValues(obj):
     if isinstance(obj, dict):
         # Remove empty values from dictionaries
-        obj = {k: RemoveEmptyValues(v) for k, v in obj.items() if RemoveEmptyValues(v)}
-        return {k: v for k, v in obj.items() if v}
+
+        if(len(obj)==0): return None
+
+        obj = {k: RemoveEmptyValues(v) for k, v in obj.items() if RemoveEmptyValues(v) is not None}
+        return {k: v for k, v in obj.items() if v is not None}
     elif isinstance(obj, list):
         # Remove empty values from lists
         return [RemoveEmptyValues(item) for item in obj if RemoveEmptyValues(item)]
@@ -189,7 +192,7 @@ def Convert(json_in, path):
     except: ExitError(filename,"no valid type")
 
     # rarity
-    json_out["rarity"]=valOrDef(json_in,"Rarity","common"); 
+    json_out["rarity"]=valOrDef(json_in,"Rarity","Common"); 
 
     # player animation
     json_out["animation"]=valOrDef(json_in,"Animation",DELETEFIELD); 
@@ -248,6 +251,7 @@ def Convert(json_in, path):
             json_out["supported_characters"]=json_in["SpawnLimits"]["Characters"]
         if HasData(json_in["SpawnLimits"],"Zones"):
             json_out["found_in"]=json_in["SpawnLimits"]["Zones"]
+        if valOrDef(json_in["SpawnLimits"],"Special",False): json_out["findable"]=False
 
     #combat effects
     if HasData(json_in,"Effects"):
@@ -347,6 +351,7 @@ def Convert(json_in, path):
         manastonePower=int(json_in["ManaStonePower"])
         if manastonePower > 0:
             json_out["manastone"]={"max_mana":manastonePower}
+
 
     if HasData(json_in,"ContextMenuOptions"):
         print("CONTEXT MENU OPTIONS NOT SUPPORTED")
