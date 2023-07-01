@@ -20,6 +20,23 @@ def frange(x, y, jump):
     yield x
     x += jump
 
+
+# various forms of true/false to bool
+def boolify(v):
+    print(v)
+    if isinstance(v, int):
+        if v==0: return False
+        if v==1: return True
+        if v==DELETEFIELD: return v
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str):
+        if (v.lower() in ("true","yes","1")): return True
+        if (v.lower() in ("false","no","0")): return False
+    ExitError("the item","Cannot convert value to boolean")
+    
+
+
 # Returns value if it exists at dictionary[key], returns default if it doesn't
 def valOrDef(dictionary, key, default):
     if key in dictionary: return dictionary[key]
@@ -148,6 +165,8 @@ def ProcessModifier(mod):
             mod_out["mod_distance"]=mod["areaDistance"]
     mod_out["length"]=valOrDef(mod,"length",DELETEFIELD)
     mod_out["mod_length"]=valOrDef(mod,"lengthForThisModifier",DELETEFIELD)
+    mod_out["stackable"]=boolify(valOrDef(mod,"stackable",DELETEFIELD))
+    if mod_out["stackable"]==True: mod_out["stackable"]=DELETEFIELD
     mod_out.update(ProcessTrigger(mod["Trigger"]))
     mod_out["effects"]=[]
     for effect in mod["effects"]:
